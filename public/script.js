@@ -64,6 +64,7 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = new FormData(form);
   const data = Object.fromEntries(formData.entries());
+  
 
   const res = await fetch("/submit", {
     method: "POST",
@@ -74,7 +75,6 @@ form.addEventListener("submit", async (e) => {
   });
 
   let geoJSONResult = await res.json();
-  pTag.textContent = JSON.stringify(geoJSONResult);
 
   // Видаляємо старий шар (якщо є)
   if (window.pointsLayer) {

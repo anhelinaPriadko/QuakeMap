@@ -17,6 +17,7 @@
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
     "leaflet": "^1.9.4",
-    "leaflet.markercluster": "^1.5.3"
+    "leaflet.markercluster": "^1.5.3",
+    "moment": "^2.30.1"
   }
 }
