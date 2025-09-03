@@ -1,6 +1,8 @@
 import express from "express";
 import axios from "axios";
 import bodyParser from "body-parser";
+import { validationResult, checkSchema } from "express-validator";
+// import { postValidationSchema } from "./utilities/validationSchemas.mjs";
 
 
 const app = express();
