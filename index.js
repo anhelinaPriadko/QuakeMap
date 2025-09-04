@@ -35,6 +35,27 @@ function calcFutureDate(endDate, interval) {
   }
 }
 
+function filterData(features, filter) {
+  let start, end;
+  switch (filter) {
+    case "day":
+      start = 6;
+      end = 18;
+      break;
+    case "night":
+      start = 18;
+      end = 6;
+      break;
+    default:
+      return features;
+  }
+
+  const filteredData = features.filter(
+    (feature) => feature.time > start || feature.time < end
+  );
+  return filteredData;
+}
+
 app.post("/submit", async (req, res) => {
   try {
     let startTime;
@@ -64,6 +85,9 @@ app.post("/submit", async (req, res) => {
         minmagnitude: req.body.minMagnitude,
       },
     });
+    if (req.body.filter) {
+      result.data = filterData(result.features, req.body.filter);
+    }
     res.json(result.data);
   } catch (error) {
     console.log(error);
