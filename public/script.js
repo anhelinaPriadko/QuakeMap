@@ -46,6 +46,7 @@ function changeMarkerRadius(markerOption, intensity) {
 
 const pTag = document.getElementById("text-content");
 const form = document.querySelector("form");
+const errors = document.getElementById("errors");
 
 //to dosplay popups
 function onEachFeature(feature, layer) {
@@ -62,6 +63,7 @@ function onEachFeature(feature, layer) {
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  errors.style.display = "none";
   const formData = new FormData(form);
   const data = Object.fromEntries(formData.entries());
 
@@ -74,6 +76,16 @@ form.addEventListener("submit", async (e) => {
   });
 
   let geoJSONResult = await res.json();
+
+  if (geoJSONResult.errors) {
+    errors.innerHTML = "";
+    for (const error of geoJSONResult.errors) {
+      const li = document.createElement("li");
+      li.textContent = error.msg;
+      errors.appendChild(li);
+    }
+    errors.style.display = "block";
+  }
 
   // Видаляємо старий шар (якщо є)
   if (window.pointsLayer) {
@@ -108,14 +120,14 @@ const radioTemps = document.querySelectorAll("#radio-temp-input");
 radioTemps.forEach((radio) => {
   radio.addEventListener("click", () => {
     inputDates.forEach((element) => {
-element.value = "";
+      element.value = "";
     });
   });
 });
 
 inputDates.forEach((date) => {
-  date.addEventListener("input",d => {
-    radios.forEach(r => {
+  date.addEventListener("input", (d) => {
+    radios.forEach((r) => {
       r.checked = false;
       r.wasChecked = false;
     });

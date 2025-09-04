@@ -3,7 +3,7 @@ import axios from "axios";
 import bodyParser from "body-parser";
 import moment from "moment";
 import { validationResult, checkSchema } from "express-validator";
-// import { postValidationSchema } from "./utilities/validationSchemas.mjs";
+import { postValidationSchema } from "./utilities/validationSchema.mjs";
 
 const app = express();
 const port = 3000;
@@ -17,10 +17,6 @@ const earthquakeURL = "https://earthquake.usgs.gov/fdsnws/event/1/query";
 app.get("/", (req, res) => {
   res.render("index.ejs");
 });
-
-function formatDate(date, time) {
-  return moment(`${date}T${time}`, "YYYY-MM-DDTHH:mm");
-}
 
 function calcFutureDate(endDate, interval) {
   switch (interval) {
@@ -48,38 +44,42 @@ function filterData(features, filter) {
   return filteredData;
 }
 
-app.post("/submit", async (req, res) => {
+app.post("/submit", checkSchema(postValidationSchema), async (req, res) => {
   try {
-    let startTime;
-    let endTime;
-    if (req.body.startDate && req.body.endDate) {
-      if (req.body.startTime)
-        startTime = formatDate(req.body.startDate, req.body.startTime);
-      else startTime = req.body.startDate;
-
-      if (req.body.endTime)
-        endTime = formatDate(req.body.endDate, req.body.endTime);
-      else endTime = req.body.endDate;
-    } else {
-      endTime = new Date();
-      startTime = calcFutureDate(endTime, req.body.interval);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.json({
+        type:"FeatureCollection",
+        metadata: {},
+        features:[],
+        errors: errors.array()
+      })
     }
-    startTime = moment(startTime).toISOString();
-    endTime = moment(endTime).toISOString();
+    let start, end;
+    if (req.body.startDateTime && req.body.endDateTime) {
+      start = req.body.startDateTime;
+      end = req.body.endDateTime;
+    } else {
+      end = new Date();
+      start = calcFutureDate(end, req.body.interval);
+    }
+    start = moment(start).toISOString();
+    end = moment(end).toISOString();
 
-    console.log(`Search: from ${startTime} to ${endTime}`);
+    console.log(`Search: from ${start} to ${end}`);
     console.log(`Search magnitude: ${req.body.minMagnitude}`);
     const result = await axios.get(earthquakeURL, {
       params: {
         format: "geojson",
-        starttime: startTime,
-        endtime: endTime,
+        starttime: start,
+        endtime: end,
         minmagnitude: req.body.minMagnitude,
       },
     });
     if (req.body.filter) {
       result.data.features = filterData(result.data.features, req.body.filter);
     }
+    // console.log(result.data);
     res.json(result.data);
   } catch (error) {
     console.log(error);
