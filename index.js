@@ -18,27 +18,49 @@ app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
+function formatDate(date, time) {
+  return moment(`${date}T${time}`, "YYYY-MM-DDTHH:mm");
+}
+
+function calcFutureDate(endDate, interval) {
+  switch (interval) {
+    case "1 year":
+      return moment(endDate).subtract(1, "year");
+    case "30 days":
+      return moment(endDate).subtract(30, "days");
+    case "7 days":
+      return moment(endDate).subtract(7, "days");
+    default:
+      return moment(endDate).subtract(1, "day");
+  }
+}
+
 app.post("/submit", async (req, res) => {
   try {
-    if (req.body.startTime)
-      req.body.startDate = moment(
-        `${req.body.startDate}T${req.body.startTime}`,
-        "YYYY-MM-DDTHH:mm"
-      ).toISOString();
+    let startTime;
+    let endTime;
+    if (req.body.startDate && req.body.endDate) {
+      if (req.body.startTime)
+        startTime = formatDate(req.body.startDate, req.body.startTime);
+      else startTime = req.body.startDate;
 
-    if (req.body.endTime)
-      req.body.endDate = moment(
-        `${req.body.endDate}T${req.body.endTime}`,
-        "YYYY-MM-DDTHH:mm"
-      ).toISOString();
+      if (req.body.endTime)
+        endTime = formatDate(req.body.endDate, req.body.endTime);
+      else endTime = req.body.endDate;
+    } else {
+      endTime = new Date();
+      startTime = calcFutureDate(endTime, req.body.interval);
+    }
+    startTime = moment(startTime).toISOString();
+    endTime = moment(endTime).toISOString();
 
-    console.log(req.body.startDate);
-    console.log(req.body.endDate);
+    console.log(`Search: from ${startTime} to ${endTime}`);
+    console.log(`Search magnitude: ${req.body.minMagnitude}`);
     const result = await axios.get(earthquakeURL, {
       params: {
         format: "geojson",
-        starttime: req.body.startDate,
-        endtime: req.body.endDate,
+        starttime: startTime,
+        endtime: endTime,
         minmagnitude: req.body.minMagnitude,
       },
     });

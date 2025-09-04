@@ -12,10 +12,10 @@
   </head>
   <body>
     <form>
-      <input type="date" name="startDate" placeholder="Start date" value="" />
-      <input type="time" name="startTime" placeholder="Enter time" value="">
-      <input type="date" name="endDate" placeholder="End date" value="" />
-      <input type="time" name="endTime" placeholder="Enter time" value="">
+      <input class="inputDate" type="date" name="startDate" placeholder="Start date" value="" />
+      <input class="inputDate" type="time" name="startTime" placeholder="Enter time" value="" />
+      <input class="inputDate" type="date" name="endDate" placeholder="End date" value="" />
+      <input class="inputDate" type="time" name="endTime" placeholder="Enter time" value="" />
       <input
         type="number"
         name="minMagnitude"
@@ -23,14 +23,30 @@
         value=""
       />
       <input type="submit" value="Search" />
+<div>
+      <input id="radio-input" type="radio" name="interval" value="24 hours" />
+      <label for="huey">Last 24 hours</label>
+    </div>
+      <div>
+        <input id="radio-input" type="radio" name="interval" value="7 days" />
+        <label for="dewey">Last 7 days</label>
+      </div>
+
+      <div>
+        <input id="radio-input" type="radio" name="interval" value="30 days" />
+        <label for="louie">Last 30 days</label>
+      </div>
+
+      <div>
+        <input id="radio-input" type="radio" name="interval" value="1 year" />
+        <label for="louie">Last year</label>
+      </div>
     </form>
 
     <% if (locals.data) { %>
     <p><%= data %></p>
     <% } %>
     <div id="map"></div>
-
-    <p id="text-content"></p>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="/script.js" charset="UTF-8"></script>

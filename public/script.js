@@ -64,7 +64,6 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = new FormData(form);
   const data = Object.fromEntries(formData.entries());
-  
 
   const res = await fetch("/submit", {
     method: "POST",
@@ -91,4 +90,33 @@ form.addEventListener("submit", async (e) => {
     },
     onEachFeature: onEachFeature,
   }).addTo(map);
+});
+
+const radios = document.querySelectorAll('input[type="radio"]');
+radios.forEach((radio) => {
+  radio.addEventListener("click", (e) => {
+    if (radio.wasChecked) {
+      radio.checked = false; // знімаємо вибір
+    }
+    radios.forEach((r) => (r.wasChecked = r.checked)); // оновлюємо стан
+  });
+});
+
+const inputDates = document.querySelectorAll(".inputDate");
+
+radios.forEach((radio) => {
+  radio.addEventListener("click", () => {
+    inputDates.forEach((element) => {
+element.value = "";
+    });
+  });
+});
+
+inputDates.forEach((date) => {
+  date.addEventListener("input",d => {
+    radios.forEach(r => {
+      r.checked = false;
+      r.wasChecked = false;
+    });
+  });
 });
