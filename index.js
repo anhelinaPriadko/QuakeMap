@@ -36,23 +36,15 @@ function calcFutureDate(endDate, interval) {
 }
 
 function filterData(features, filter) {
-  let start, end;
-  switch (filter) {
-    case "day":
-      start = 6;
-      end = 18;
-      break;
-    case "night":
-      start = 18;
-      end = 6;
-      break;
-    default:
-      return features;
-  }
-
-  const filteredData = features.filter(
-    (feature) => feature.time > start || feature.time < end
-  );
+  const filteredData = features.filter((feature) => {
+    const date = new Date(feature.properties.time);
+    const hour = date.getHours();
+    if (filter === "day") {
+      return hour >= 6 && hour < 18;
+    } else {
+      return hour >= 18 || hour < 6;
+    }
+  });
   return filteredData;
 }
 
@@ -86,7 +78,7 @@ app.post("/submit", async (req, res) => {
       },
     });
     if (req.body.filter) {
-      result.data = filterData(result.features, req.body.filter);
+      result.data.features = filterData(result.data.features, req.body.filter);
     }
     res.json(result.data);
   } catch (error) {

@@ -103,8 +103,9 @@ radios.forEach((radio) => {
 });
 
 const inputDates = document.querySelectorAll(".inputDate");
+const radioTemps = document.querySelectorAll("#radio-temp-input");
 
-radios.forEach((radio) => {
+radioTemps.forEach((radio) => {
   radio.addEventListener("click", () => {
     inputDates.forEach((element) => {
 element.value = "";
