@@ -4,6 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -11,91 +23,134 @@
     <link href="styles/styles.css" rel="stylesheet" />
   </head>
   <body>
-    <ul id="errors" class="hiden-element">
+    <ul id="errors" class="hiden-element"></ul>
 
-    </ul>
-    <form>
-      <input
-        class="inputDate"
-        type="date"
-        name="startDate"
-        placeholder="Start date"
-        value=""
-      />
-      <input
-        class="inputDate"
-        type="time"
-        name="startTime"
-        placeholder="Enter time"
-        value=""
-      />
-      <input
-        class="inputDate"
-        type="date"
-        name="endDate"
-        placeholder="End date"
-        value=""
-      />
-      <input
-        class="inputDate"
-        type="time"
-        name="endTime"
-        placeholder="Enter time"
-        value=""
-      />
-      <input
-        type="number"
-        name="minMagnitude"
-        placeholder="Minimal magnitude"
-        value=""
-      />
-      <input type="submit" value="Search" />
-      <div>
-        <input id="radio-temp-input" type="radio" name="interval" value="24 hours" />
-        <label for="radio-temp-input">Last 24 hours</label>
-      </div>
-      <div>
-        <input id="radio-temp-input" type="radio" name="interval" value="7 days" />
-        <label for="radio-temp-input">Last 7 days</label>
-      </div>
+    <div class="form-container inter-font">
+      <form>
+        <div class="input-data">
+          <div class="date-time-container">
+            <div class="date-time-container">
+              <p>Start date:</p>
+              <input
+                class="inputDate"
+                type="date"
+                name="startDate"
+                placeholder="Start date"
+                value=""
+              />
+              <input
+                class="inputDate"
+                type="time"
+                name="startTime"
+                placeholder="Start time"
+                value=""
+              />
+            </div>
+            <div class="date-time-container">
+              <p>End date:</p>
+              <input
+                class="inputDate"
+                type="date"
+                name="endDate"
+                placeholder="End date"
+                value=""
+              />
+              <input
+                class="inputDate"
+                type="time"
+                name="endTime"
+                placeholder="End time"
+                value=""
+              />
+            </div>
+          </div>
 
-      <div>
-        <input id="radio-temp-input" type="radio" name="interval" value="30 days" />
-        <label for="radio-temp-input">Last 30 days</label>
-      </div>
+          <div class="template">
+            <div>
+              <input
+                id="radio-temp-input"
+                type="radio"
+                name="interval"
+                value="24 hours"
+              />
+              <label for="radio-temp-input">Last 24 hours</label>
+            </div>
+            <div>
+              <input
+                id="radio-temp-input"
+                type="radio"
+                name="interval"
+                value="7 days"
+              />
+              <label for="radio-temp-input">Last 7 days</label>
+            </div>
 
-      <div>
-        <input id="radio-temp-input" type="radio" name="interval" value="1 year" />
-        <label for="radio-temp-input">Last year</label>
-      </div>
+            <div>
+              <input
+                id="radio-temp-input"
+                type="radio"
+                name="interval"
+                value="30 days"
+              />
+              <label for="radio-temp-input">Last 30 days</label>
+            </div>
 
-      <div>
-        <h3>Filter:</h3>
-        <div>
-          <input
-            id="filter-radio-input"
-            type="radio"
-            name="filter"
-            value="day"
-          />
-          <label for="filter-radio-input">Day hours (06:00 - 18:00)</label>
+            <div>
+              <input
+                id="radio-temp-input"
+                type="radio"
+                name="interval"
+                value="1 year"
+              />
+              <label for="radio-temp-input">Last year</label>
+            </div>
+          </div>
+
+          <div class="filter">
+            <p>Filter:</p>
+            <div>
+              <input
+                id="filter-radio-input"
+                type="radio"
+                name="filter"
+                value="day"
+              />
+              <label for="filter-radio-input">Day hours (06:00 - 18:00)</label>
+            </div>
+            <div>
+              <input
+                id="filter-radio-input"
+                type="radio"
+                name="filter"
+                value="night"
+              />
+              <label for="filter-radio-input"
+                >Night hours (18:00 - 09:00)</label
+              >
+            </div>
+          </div>
         </div>
-        <div>
-          <input
-            id="filter-radio-input"
-            type="radio"
-            name="filter"
-            value="night"
-          />
-          <label for="filter-radio-input">Night hours (18:00 - 09:00)</label>
+
+        <div class="submit-data">
+          <div>
+            <input
+              type="number"
+              name="minMagnitude"
+              placeholder="Minimal magnitude"
+              value=""
+            />
+            <input type="submit" value="Search" />
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
 
     <% if (locals.data) { %>
     <p><%= data %></p>
     <% } %>
-    <div id="map"></div>
+    <div class="map-container">
+      <div id="map"></div>
+    </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="/script.js" charset="UTF-8"></script>

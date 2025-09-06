@@ -1,8 +1,91 @@
-#map {
-  height: 700px;
-  width: 80%;
+html {
+  background-color: #f3f3e0;
 }
 
-.hiden-element{
-    display: none;
+.input-data {
+  display: flex;
+  justify-content: center;
+  gap: 15%;
+  width: 100%;
+}
+
+form {
+  width: 90%;
+  /* background-image: url("/img/pexels-photo-12357271.jpeg"); */
+   background-image: url("/img/dark-cliffs.jpg"); 
+  /* background-image: url("/img/very-big-beautiful-black-rocks-600nw-2277303345.png"); */
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-position: center center;
+  padding: 80px 0px 40px 0px;
+  color:#f3f3e0;
+  font-size: 1.3rem;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  
+}
+
+#map {
+  height: 700px;
+  width: 90%;
+}
+
+.map-container {
+  display: flex;
+  justify-content: center;
+}
+
+.hiden-element {
+  display: none;
+}
+
+.playfair-font {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.inter-font {
+  font-family: "Inter Tight", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.submit-data > div > input {
+  display: block;
+}
+
+.submit-data {
+  display: flex;
+  justify-content: center;
+}
+
+p {
+  margin: 0px;
+}
+
+input[type="date"], 
+input[type="time"], 
+input[type="number"]{
+  font-size: 1.3rem;
+  font-family: "Inter Tight", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+
+  border-radius: 5px;
+  border: 0px;
+  padding: 4px;
+  color: #1B1A55;
+}
+
+input[type="date"]:focus, 
+input[type="time"]:focus, 
+input[type="number"]:focus {
+   outline: 4px solid #B3C8CF; 
 }
