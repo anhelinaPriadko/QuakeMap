@@ -47,8 +47,8 @@ function changeMarkerRadius(markerOption, intensity) {
 const pTag = document.getElementById("text-content");
 const form = document.querySelector("form");
 const errors = document.getElementById("errors");
+const errorsList = document.getElementById("errors-list");
 
-//to dosplay popups
 function onEachFeature(feature, layer) {
   if (feature.properties && !feature.properties.popupContent) {
     feature.properties.popupContent = `Place: ${feature.properties.place}<br>
@@ -63,7 +63,13 @@ function onEachFeature(feature, layer) {
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  errors.style.display = "none";
+
+  if (errors.classList.contains("show-errors"))
+    errors.classList.remove("show-errors");
+
+  if (!errors.classList.contains("hide-errors"))
+    errors.classList.add("hide-errors");
+
   const formData = new FormData(form);
   const data = Object.fromEntries(formData.entries());
 
@@ -78,21 +84,23 @@ form.addEventListener("submit", async (e) => {
   let geoJSONResult = await res.json();
 
   if (geoJSONResult.errors) {
-    errors.innerHTML = "";
+    errorsList.innerHTML = "";
+
+    if (errors.classList.contains("hide-errors"))
+      errors.classList.remove("hide-errors");
+    if (!errors.classList.contains("show-errors"))
+      errors.classList.add("show-errors");
     for (const error of geoJSONResult.errors) {
       const li = document.createElement("li");
       li.textContent = error.msg;
-      errors.appendChild(li);
+      errorsList.appendChild(li);
     }
-    errors.style.display = "block";
   }
 
-  // Видаляємо старий шар (якщо є)
   if (window.pointsLayer) {
     map.removeLayer(window.pointsLayer);
   }
 
-  // Створюємо новий шар з отриманих даних
   window.pointsLayer = L.geoJSON(geoJSONResult, {
     pointToLayer: function (feature, latlng) {
       let markerOptions = { ...geojsonMarkerOptions };
@@ -108,9 +116,9 @@ const radios = document.querySelectorAll('input[type="radio"]');
 radios.forEach((radio) => {
   radio.addEventListener("click", (e) => {
     if (radio.wasChecked) {
-      radio.checked = false; // знімаємо вибір
+      radio.checked = false;
     }
-    radios.forEach((r) => (r.wasChecked = r.checked)); // оновлюємо стан
+    radios.forEach((r) => (r.wasChecked = r.checked));
   });
 });
 
