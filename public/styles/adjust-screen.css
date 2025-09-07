@@ -1,0 +1,63 @@
+@media (max-width: 1097px) and (min-width: 990px) {
+  .input-data {
+    gap: 8%;
+  }
+
+  form {
+    font-size: 1.2rem;
+  }
+
+  input[type="date"],
+  input[type="time"],
+  input[type="number"],
+  input[type="submit"] {
+    font-size: 1.2rem;
+  }
+
+  .title-container > h1 {
+    font-size: 3.7rem;
+  }
+}
+
+@media (max-width: 989px) and (min-width: 886px) {
+  form {
+    font-size: 1.1rem;
+  }
+
+  input[type="date"],
+  input[type="time"],
+  input[type="number"],
+  input[type="submit"] {
+    font-size: 1.1rem;
+  }
+
+  .title-container > h1 {
+    font-size: 3.5rem;
+  }
+
+  .input-data {
+    gap: 6%;
+  }
+}
+
+@media (max-width: 885px) and (min-width: 0px) {
+    .title-container > h1 {
+    font-size: 3rem;
+  }
+  .input-data {
+    display: block;
+  }
+
+  form {
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  input[type="date"],
+  input[type="time"],
+  input[type="number"],
+  input[type="submit"] {
+    font-size: 1.3rem;
+  }
+}
