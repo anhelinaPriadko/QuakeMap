@@ -41,7 +41,7 @@ OpenStreetMap tiles – map background
 
 Clone the repository:
 
-git clone https://github.com/your-username/earthquake-visualization.git
+git clone https://github.com/anhelinaPriadko/QuakeMap.git
 cd earthquake-visualization
 
 
