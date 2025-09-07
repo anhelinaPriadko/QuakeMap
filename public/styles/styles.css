@@ -139,3 +139,28 @@ input[type="submit"]:hover {
   justify-content: center;
 }
 
+.errors-container{
+  display: flex;
+  justify-content: center;
+}
+
+.show-errors {
+  color: #b8001f;
+  display: flex;
+  justify-content: center;
+  outline: none;
+
+  border: 2px solid #b8001f;
+  background-color: #ffd3da;
+  width: 90%;
+  border-radius: 5px;
+  font-size: 1rem;
+
+  margin-bottom: 20px;
+}
+
+.hide-errors {
+  display: none;
+  border: 0px;
+  outline: none;
+}
