@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Earthquake map visualization with filters</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,6 +16,15 @@
       href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"
+    />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -27,13 +36,6 @@
     <div class="title-container">
       <h1 class="playfair-font">QuakeScope</h1>
     </div>
-
-    <div class="errors-container">
-      <div id="errors">
-        <ul id="errors-list" class="inter-font"></ul>
-      </div>
-    </div>
-
     <div class="form-container inter-font">
       <form>
         <div>
@@ -162,14 +164,25 @@
       </form>
     </div>
 
+    <div class="errors-container">
+      <div id="errors">
+        <ul id="errors-list" class="inter-font"></ul>
+      </div>
+    </div>
+
     <% if (locals.data) { %>
     <p><%= data %></p>
     <% } %>
     <div class="map-container">
+      <div id="loading-spinner" class="hidden">
+        <div class="spinner"></div>
+        <p>Loading data...</p>
+      </div>
       <div id="map"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
     <script src="/script.js" charset="UTF-8"></script>
   </body>
 </html>

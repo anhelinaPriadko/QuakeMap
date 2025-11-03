@@ -5,6 +5,12 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 
+let markers = L.markerClusterGroup({
+    chunkedLoading: true,
+    chunkInterval: 50,
+});
+map.addLayer(markers);
+
 let geojsonMarkerOptions = {
   radius: 6,
   fillColor: "#9a9a9cff",
@@ -48,6 +54,15 @@ const pTag = document.getElementById("text-content");
 const form = document.querySelector("form");
 const errors = document.getElementById("errors");
 const errorsList = document.getElementById("errors-list");
+const spinnerElement = document.getElementById("loading-spinner");
+
+function showSpinner() {
+  spinnerElement.classList.remove("hidden");
+}
+
+function hideSpinner() {
+  spinnerElement.classList.add("hidden");
+}
 
 function onEachFeature(feature, layer) {
   if (feature.properties && !feature.properties.popupContent) {
@@ -63,6 +78,7 @@ function onEachFeature(feature, layer) {
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  showSpinner();
 
   if (errors.classList.contains("show-errors"))
     errors.classList.remove("show-errors");
@@ -81,6 +97,7 @@ form.addEventListener("submit", async (e) => {
     body: JSON.stringify(data),
   });
 
+  hideSpinner();
   let geoJSONResult = await res.json();
 
   if (geoJSONResult.errors) {
@@ -97,11 +114,9 @@ form.addEventListener("submit", async (e) => {
     }
   }
 
-  if (window.pointsLayer) {
-    map.removeLayer(window.pointsLayer);
-  }
+  markers.clearLayers();
 
-  window.pointsLayer = L.geoJSON(geoJSONResult, {
+  let newGeoJsonLayer = L.geoJSON(geoJSONResult, {
     pointToLayer: function (feature, latlng) {
       let markerOptions = { ...geojsonMarkerOptions };
       changeMarkerColor(markerOptions, feature.properties.mag);
@@ -109,7 +124,12 @@ form.addEventListener("submit", async (e) => {
       return L.circleMarker(latlng, markerOptions);
     },
     onEachFeature: onEachFeature,
-  }).addTo(map);
+  });
+
+  markers.addLayer(newGeoJsonLayer);
+  if (geoJSONResult.features && geoJSONResult.features.length > 0) {
+    map.fitBounds(markers.getBounds());
+  }
 });
 
 const radios = document.querySelectorAll('input[type="radio"]');

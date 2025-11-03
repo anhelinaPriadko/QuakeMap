@@ -49,11 +49,11 @@ app.post("/submit", checkSchema(postValidationSchema), async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.json({
-        type:"FeatureCollection",
+        type: "FeatureCollection",
         metadata: {},
-        features:[],
-        errors: errors.array()
-      })
+        features: [],
+        errors: errors.array(),
+      });
     }
     let start, end;
     if (req.body.startDateTime && req.body.endDateTime) {
@@ -66,24 +66,64 @@ app.post("/submit", checkSchema(postValidationSchema), async (req, res) => {
     start = moment(start).toISOString();
     end = moment(end).toISOString();
 
+    const params = {
+      format: "geojson",
+
+      starttime: start,
+
+      endtime: end,
+    };
+
+    if (req.body.minMagnitude && req.body.minMagnitude !== "") {
+      params.minmagnitude = req.body.minMagnitude;
+    } else {
+      params.minmagnitude = 2.5;
+    }
+
     console.log(`Search: from ${start} to ${end}`);
-    console.log(`Search magnitude: ${req.body.minMagnitude}`);
+    console.log(`Search magnitude: ${params.minmagnitude}`);
+
     const result = await axios.get(earthquakeURL, {
-      params: {
-        format: "geojson",
-        starttime: start,
-        endtime: end,
-        minmagnitude: req.body.minMagnitude,
-      },
+      params: params,
     });
     if (req.body.filter) {
       result.data.features = filterData(result.data.features, req.body.filter);
     }
-    // console.log(result.data);
+    console.log(result.data);
     res.json(result.data);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Server error" });
+    let errorMessage = "Occured server error, try again later!";
+    let isApiLimitError = false;
+
+    if (
+      error.response &&
+      error.response.status === 400 &&
+      error.response.data &&
+      error.response.data.includes("exceeds search limit")
+    ) {
+      errorMessage =
+        "You`ve reached data limit, please specify higher magnitude or shorten time interval!";
+
+      isApiLimitError = true;
+
+      console.error("API Limit Error:", error.response.data);
+    } else {
+      console.error("Unexpected error during API call:", error);
+    }
+
+    return res.json({
+      type: "FeatureCollection",
+      metadata: {},
+      features: [],
+      errors: [
+        {
+          type: isApiLimitError ? "api-limit" : "server-error",
+          msg: errorMessage,
+          path: "external-api",
+          location: "server",
+        },
+      ],
+    });
   }
 });
 
